@@ -1,6 +1,10 @@
+import { Button } from "@radix-ui/themes";
+import Link from "next/link";
+
 export default function Blog() {
-    return <div>
-        <h1>Blog</h1>
-        <p>This is the blog page</p>
-    </div>
+    return (
+        <div>
+            <Button><Link href='/blog/new'>New Blog</Link></Button>
+        </div>
+    )
 }
