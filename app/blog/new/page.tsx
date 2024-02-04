@@ -1,8 +1,9 @@
 'use client';
 
-import { Button, TextArea, TextField } from "@radix-ui/themes";
-import Link from "next/link";
-import React from 'react'
+import { Button, TextField } from "@radix-ui/themes";
+import React from 'react';
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
 export default function NewBlog() {
     return (
@@ -10,7 +11,7 @@ export default function NewBlog() {
             <TextField.Root>
                 <TextField.Input placeholder="Title" />
             </TextField.Root>
-            <TextArea placeholder="Content" />
+            <SimpleMDE />
             <Button>Submit New Blog</Button>
         </div>
     )
