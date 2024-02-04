@@ -12,7 +12,7 @@ const createUserSchema = z.object({
 export async function POST(request: NextRequest) {
     const body = await request.json();
     const validation = createUserSchema.safeParse(body);
-    if (!validation.success) return NextResponse.json(validation.error.errors, {status: 400});
+    if (!validation.success) return NextResponse.json(validation.error.errors, {status: 401});
     const user = await prisma.user.create({
         data: body
     })
