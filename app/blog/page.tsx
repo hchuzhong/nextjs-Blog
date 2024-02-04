@@ -1,6 +1,7 @@
+import { Button } from "@radix-ui/themes";
+
 export default function Blog() {
     return <div>
-        <h1>Blog</h1>
-        <p>This is the blog page</p>
+        <Button>create</Button>
     </div>
 }
