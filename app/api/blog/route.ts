@@ -10,10 +10,11 @@ const createBlogSchema = z.object({
 export async function POST(request: NextRequest) {
     const body = await request.json();
     const validation = createBlogSchema.safeParse(body);
-    if (!validation.success) return NextResponse.json(validation.error.errors, {status: 400});
+    if (!validation.success) return NextResponse.json(validation.error.errors, {status: 401});
     const user = await prisma.post.create({
         data: {
             ...body,
+            // TODO
             userId: 1
         }
     })
