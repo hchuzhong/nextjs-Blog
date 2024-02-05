@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createBlogSchema } from "@/app/validationSchemas";
 import { z } from 'zod';
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type BlogForm = z.infer<typeof createBlogSchema>
 
@@ -20,22 +21,26 @@ export default function NewBlog() {
     });
     const router = useRouter();
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmmiting] = useState(false);
+    const onSubbmit = async (data: BlogForm) => {
+        console.log('check data:', data);
+        try {
+            setIsSubmmiting(true);
+            await axios.post('/api/blog', data);
+            setIsSubmmiting(false);
+            router.push('/blog');
+        } catch (error) {
+            setIsSubmmiting(false);
+            setError('An unexpected error occured');
+        }
+    }
 
     return (
         <div>
             {error && <Callout.Root color="red" className="mb-5">
                 <Callout.Text>{error}</Callout.Text>
             </Callout.Root>}
-            <form className="space-y-5" onSubmit={handleSubmit(async (data) => {
-                console.log('check data:', data);
-                try {
-                    await axios.post('/api/blog', data);
-                    router.push('/blog');
-                } catch (error) {
-                    console.log('error:', error);
-                    setError('An unexpected error occured');
-                }
-            })}>
+            <form className="space-y-5" onSubmit={handleSubmit(onSubbmit)}>
                 <TextField.Root>
                     <TextField.Input placeholder="Title" {...register('title')} />
                 </TextField.Root>
@@ -46,7 +51,7 @@ export default function NewBlog() {
                     render={({ field }) => <SimpleMDE placeholder="Content" {...field} />}
                 />
                 <ErrorMessage>{errors.content?.message}</ErrorMessage>
-                <Button>Submit New Blog</Button>
+                <Button disabled={isSubmitting}>Submit New Blog {isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )
