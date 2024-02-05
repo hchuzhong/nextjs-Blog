@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createBlogSchema } from "@/app/validationSchemas";
 import { z } from 'zod';
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 type BlogForm = z.infer<typeof createBlogSchema>
 
@@ -38,13 +39,13 @@ export default function NewBlog() {
                 <TextField.Root>
                     <TextField.Input placeholder="Title" {...register('title')} />
                 </TextField.Root>
-                {errors.title && <Text color="red" as="p">{errors.title.message}</Text>}
+                <ErrorMessage>{errors.title?.message}</ErrorMessage>
                 <Controller
                     name="content"
                     control={control}
                     render={({ field }) => <SimpleMDE placeholder="Content" {...field} />}
                 />
-                {errors.content && <Text color="red" as="p">{errors.content.message}</Text>}
+                <ErrorMessage>{errors.content?.message}</ErrorMessage>
                 <Button>Submit New Blog</Button>
             </form>
         </div>
