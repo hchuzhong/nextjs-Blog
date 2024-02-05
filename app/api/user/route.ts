@@ -1,13 +1,6 @@
+import { createUserSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-// TODO
-const createUserSchema = z.object({
-    name: z.string().min(1).max(255),
-    email: z.string().min(1),
-    password: z.string().min(1).max(16),
-});
 
 export async function POST(request: NextRequest) {
     const body = await request.json();

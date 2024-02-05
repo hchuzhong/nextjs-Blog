@@ -1,11 +1,6 @@
+import { createBlogSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const createBlogSchema = z.object({
-    title: z.string().min(1, 'Title is required').max(255),
-    content: z.string().min(1, 'Content is required'),
-});
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
