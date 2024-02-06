@@ -10,37 +10,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(255)
-  createdAt   DateTime  @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
-  content     String?   @db.Text
-  published   Boolean   @default(false)
-  publishedAt DateTime?
-  userId      Int
-  User        User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Comments    Comment[]
+model User {
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Blog      BlogPost[]
+  Comment   Comment[]
+}
+
+model BlogPost {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
-  content   String
-  createdAt DateTime  @default(now()) @db.Timestamp(6)
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  userId    Int       @unique
-  User      User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  postId    Int       @unique
-  Post      Post      @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model User {
-  id       Int       @id @default(autoincrement())
-  name     String?   @db.VarChar(255)
-  email    String    @unique @db.VarChar(255)
-  password String    @db.VarChar(255)
-  Post     Post[]
-  Comment  Comment[]
+  id         Int      @id @default(autoincrement())
+  content    String
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   Int
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id])
+  blogPostId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
